@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Jonah Goldberg / Section 002
  *
  *   Note, additional comments provided throughout source code is
  *   for educational purposes.
@@ -9,10 +9,6 @@
 
 import java.util.BitSet;
 import java.util.Random;
-import java.util.HashSet;
-import java.util.Set;
-import java.security.SecureRandom;
-import java.lang.Math;
 
 
 /**
