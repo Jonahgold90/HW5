@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Jonah Goldberg / Section 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -250,7 +250,68 @@ public class CuckooHash<K, V> {
 		// Also make sure you read this method's prologue above, it should help
 		// you. Especially the two HINTS in the prologue.
 
-		return;
+		//Initialize alternate and primary positions using the two hash functions
+		int primaryPosition = hash1(key);
+		int alternatePosition = hash2(key);
+
+		//Max amount of shuffles before we determine if we are in an infinite cycle
+		int maxShuffles = CAPACITY;
+
+		//Check if the key value pair already exists at either of the hashes and skip insertion if it does
+		if((table[primaryPosition] != null && table[primaryPosition].getBucKey().equals(key) && table[primaryPosition].getValue().equals(value)) 
+		|| (table[alternatePosition] != null && table[alternatePosition].getBucKey().equals(key) && table[alternatePosition].getValue().equals(value))) {
+			return;
+		}
+
+		//Create a new put bucket with the given key and value
+		Bucket<K, V> putBucket = new Bucket<>(key, value);
+
+		//Loop from 0 to max amount of shuffles (CAPACITY var)
+		for(int i = 0; i < maxShuffles; i++) {
+			//Check if the primary position is empty
+			if(table[primaryPosition] == null) {
+				//Insert if the position is open
+				table[primaryPosition] = putBucket;
+				return;
+			}
+
+			//Check if the alternate position is empty
+			if(table[alternatePosition] == null) {
+				//Insert if the position is open
+				table[alternatePosition] = putBucket;
+				return;
+			}
+
+			//If neither buckets are open we need to swap the existing bucket with the new one
+			Bucket<K, V> tempBucket = table[primaryPosition];
+			
+			//Set the primary position to the put bucket
+			table[primaryPosition] = putBucket;
+
+			//Put bucket is now set as the tempBucket
+			putBucket = tempBucket;
+
+			//Determine the next position at which to try to insert the new putBucket
+			if(primaryPosition == hash1(putBucket.getBucKey())) {
+				primaryPosition = hash2(putBucket.getBucKey());
+			} else {
+				primaryPosition = hash1(putBucket.getBucKey());
+			}
+
+			//Insert the bucket if the new position is free
+			if(table[primaryPosition] == null) {
+				table[primaryPosition] = putBucket;
+				return;
+			}
+		}
+
+		//If we're out of the loop then insertion has failed due to capacity
+		//Rehash
+		rehash();
+		
+		//Recursively call the put method with the current putBuckets key and value
+		put(putBucket.getBucKey(), putBucket.getValue());
+
 	}
 
 

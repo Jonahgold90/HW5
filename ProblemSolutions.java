@@ -73,8 +73,22 @@ class ProblemSolutions {
     public int findKthLargest(int[] array, int k) {
 
         // ADD YOUR CODE HERE
+        
+        //Initialize max heap priority queue
+        PriorityQueue<Integer> prioQueue = new PriorityQueue<>(Collections.reverseOrder());
+        
+        //Add all the numbers from the array into the prio queue
+        for(int num : array) {
+            prioQueue.add(num);
+        }
 
-        return 0;
+        //Iterate from 0 to k - 1
+        for(int i = 0; i < k - 1; i++) {
+            prioQueue.poll();
+        }
+
+        //The kth largest element in the array
+        return prioQueue.peek();
     }
 
 
@@ -92,10 +106,34 @@ class ProblemSolutions {
      */
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
-
+        
         // ADD YOU CODE HERE
 
-        return null;
+        //Initialize a new integer array of size arr1 size + arr2 size
+        int[] res = new int[array1.length + array2.length];
+        
+
+        //initialize min heap priority queue
+        PriorityQueue<Integer> prioQueue = new PriorityQueue<>();
+
+        //Add all the elements from array 1 into priority queue
+        for(int num : array1) {
+            prioQueue.add(num);
+        }
+
+        //Add all the elements from array 2 into priority queue
+        for(int num : array2) {
+            prioQueue.add(num);
+        }
+
+        //Numbers in prio queue are not descending to ascending as needed
+        //Loop through prio queue and add each element to the res array
+        for(int i = 0; i < res.length; i++) {
+            res[i] = prioQueue.poll();
+        }
+
+        //Return the res array
+        return res;
     }
 
 }
